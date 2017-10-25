@@ -1,3 +1,4 @@
+
 import unittest
 import tweepy
 import requests
@@ -6,7 +7,7 @@ import json
 ## SI 206 - HW
 ## COMMENT WITH:
 ## Your section day/time: Thursday 8:30 AM
-## Any names of people you worked with on this assignment:
+## Any names of people you worked with on this assignment: Abigal Snyder
 
 
 ## Write code that uses the tweepy library to search for tweets with three different phrases of the 
@@ -33,8 +34,6 @@ import json
 ## See: https://docs.google.com/a/umich.edu/document/d/1o8CWsdO2aRT7iUz9okiCHCVgU5x_FyZkabu2l9qwkf8/edit?usp=sharing
 
 
-
-
 ## **** For extra credit, create another file called twitter_info.py that 
 ## contains your consumer_key, consumer_secret, access_token, and access_token_secret, 
 ## import that file here.  Do NOT add and commit that file to a public GitHub repository.
@@ -47,11 +46,16 @@ import json
 ## Get your secret values to authenticate to Twitter. You may replace each of these 
 ## with variables rather than filling in the empty strings if you choose to do the secure way 
 ## for EC points
-consumer_key = "" 
-consumer_secret = ""
-access_token = ""
-access_token_secret = ""
+consumer_key = "ZTqdM4VdyqBbrOouSB9ZAZGyP" 
+consumer_secret = "YQ3fztALQVnEwwZj4Fpvxv2g214NhauK9CBVG62qzu28j6P4Hj"
+access_token = "922531177352675336-ygxTFN7BqSKbnpupX2dvCmfD2LzdJji"
+access_token_secret = "sRoM4LCoHPBKMpsBIsLojLf22cg5q8hOba2Ro3y9UabAM"
 ## Set up your authentication to Twitter
+consumer_key = twitter_info.consumer_key
+consumer_secret = twitter_info.consumer_secret
+access_token = twitter_info.access_token
+access_token_secret = twitter_info.access_token_secret
+
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 # Set up library to grab stuff from twitter with your authentication, and 
@@ -64,6 +68,14 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 #### Recommended order of tasks: ####
 ## 1. Set up the caching pattern start -- the dictionary and the try/except 
 ## 		statement shown in class.
+CACHE_FNAME = 'cache.json'
+try:
+    cache_file = open(CACHE_FNAME, 'r') # Try to read the data from the file
+    cache_contents = cache_file.read()  # If it's there, get it into a string
+    CACHE_DICTION = json.loads(cache_contents) # And then load it into a dictionary
+    cache_file.close() # Close the file, we're good, we got the data in a dictionary.
+except:
+    CACHE_DICTION = {}
 
 
 
@@ -71,10 +83,42 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 ## 		so it either gets new data or caches data, depending upon what the input 
 ##		to search for is. 
 
-
+def Twitterdata(keyword):
+	if keyword in CACHE_DICTION:
+		return CACHE_DICTION[keyword]
+	else:
+		api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
+		public_tweets = api.home_timeline()
+		textandtime = []
+		for tweet in public_tweets:
+			if keyword in tweet['text']:
+				textandtime.append(tweet['text'])
+				textandtime.append(tweet['created_at'])
+		firstfive = {}
+		for i in range(0, len(textandtime)-1):
+			firstfive[textandtime[i]] = textandtime[i + 1]
+		CACHE_DICTION[keyword] = Twitterdata(keyword)
+		writefile = open(CACHE_FNAME,"w")
+		writefile.write(dumped_json_cache)
+		writefile.close()
+	return firstfive
+	
+			
 
 ## 3. Using a loop, invoke your function, save the return value in a variable, and explore the 
 ##		data you got back!
+
+for i in range (0,3):
+	keyword = input('Enter a keyword:')
+	info = Twitterdata(keyword)
+	readfile = open(CACHE_FNAME,"r")
+	jsondata = json.load(readfile)
+	x = 0
+	for key in jsondata[word].keys():
+		val = list(jsondata[word].values())[x]
+		print ('TEXT: ' + key)
+		print ('CREATED AT: ' + value)
+		x += 1
 
 
 ## 4. With what you learn from the data -- e.g. how exactly to find the 
@@ -82,6 +126,16 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 ## 		content from 5 tweets, as shown in the linked example.
 
 
+
+# print (CACHE_DICTION[keyword])
+# 		writefile = open(CACHE_FNAME,"w")
+# 		writefile.write(dumped_json_cache)
+# 	else:
+# 		CACHE_DICTION[keyword] = Twitterdata(keyword)
+# 		print ('TEXT:' + str(CACHE_DICTION[keyword].keys()) + '\n' 'CREATED AT: ' + str(CACHE_DICTION[keyword].values()))
+# 	next = input('Do you want to keep going? Yes or No?:')
+# 	if next == 'No':
+		# next = False
 
 
 
