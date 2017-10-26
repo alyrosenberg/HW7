@@ -3,6 +3,7 @@ import unittest
 import tweepy
 import requests
 import json
+import twitter_info
 
 ## SI 206 - HW
 ## COMMENT WITH:
@@ -46,10 +47,7 @@ import json
 ## Get your secret values to authenticate to Twitter. You may replace each of these 
 ## with variables rather than filling in the empty strings if you choose to do the secure way 
 ## for EC points
-consumer_key = "ZTqdM4VdyqBbrOouSB9ZAZGyP" 
-consumer_secret = "YQ3fztALQVnEwwZj4Fpvxv2g214NhauK9CBVG62qzu28j6P4Hj"
-access_token = "922531177352675336-ygxTFN7BqSKbnpupX2dvCmfD2LzdJji"
-access_token_secret = "sRoM4LCoHPBKMpsBIsLojLf22cg5q8hOba2Ro3y9UabAM"
+
 ## Set up your authentication to Twitter
 consumer_key = twitter_info.consumer_key
 consumer_secret = twitter_info.consumer_secret
