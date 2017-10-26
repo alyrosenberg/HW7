@@ -83,22 +83,15 @@ def Twitterdata(keyword):
 	if keyword in CACHE_DICTION:
 		return CACHE_DICTION[keyword]
 	else:
-		api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
-		public_tweets = api.home_timeline()
+		public_tweets = api.search(q=keyword)
 		textandtime = []
-		for tweet in public_tweets:
-			if keyword in tweet['text']:
-				textandtime.append(tweet['text'])
-				textandtime.append(tweet['created_at'])
-		firstfive = {}
 		for i in range(0, len(textandtime)-1):
 			firstfive[textandtime[i]] = textandtime[i + 1]
-		CACHE_DICTION[keyword] = firstfive
+		CACHE_DICTION[keyword] = public_tweets
 		writefile = open(CACHE_FNAME,"w")
-		dumped_json_cache = json.dumps(CACHE_DICTION)
-		writefile.write(dumped_json_cache)
+		writefile.write(json.dumps(CACHE_DICTION))
 		writefile.close()
-	return firstfive
+	return public_tweets
 	
 ## 3. Using a loop, invoke your function, save the return value in a variable, and explore the 
 ##		data you got back!
@@ -106,18 +99,9 @@ def Twitterdata(keyword):
 for i in range (0,3):
 	keyword = input('Enter a keyword:')
 	info = Twitterdata(keyword)
-	for item in info:
-		print ('Text: ' + item)
-		print ('CREATED AT: ' + info[item])
-
-	# readfile = open(CACHE_FNAME,"r")
-	# jsondata = json.load(readfile)
-	# x = 0
-	# for key in jsondata[word].keys():
-	# 	val = list(jsondata[word].values())[x]
-	# 	print ('TEXT: ' + key)
-	# 	print ('CREATED AT: ' + value)
-	# 	x += 1
+	for item in info['statuses'][:5]:
+		print ('TEXT: ' + item['text'])
+		print ('CREATED AT: ' + item['created_at'])
 
 
 ## 4. With what you learn from the data -- e.g. how exactly to find the 
