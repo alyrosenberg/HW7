@@ -75,8 +75,6 @@ try:
 except:
     CACHE_DICTION = {}
 
-
-
 ## 2. Write a function to get twitter data that works with the caching pattern, 
 ## 		so it either gets new data or caches data, depending upon what the input 
 ##		to search for is. 
@@ -102,8 +100,6 @@ def Twitterdata(keyword):
 		writefile.close()
 	return firstfive
 	
-			
-
 ## 3. Using a loop, invoke your function, save the return value in a variable, and explore the 
 ##		data you got back!
 
