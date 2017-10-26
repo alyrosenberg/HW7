@@ -95,8 +95,9 @@ def Twitterdata(keyword):
 		firstfive = {}
 		for i in range(0, len(textandtime)-1):
 			firstfive[textandtime[i]] = textandtime[i + 1]
-		CACHE_DICTION[keyword] = Twitterdata(keyword)
+		CACHE_DICTION[keyword] = firstfive
 		writefile = open(CACHE_FNAME,"w")
+		dumped_json_cache = json.dumps(CACHE_DICTION)
 		writefile.write(dumped_json_cache)
 		writefile.close()
 	return firstfive
@@ -109,14 +110,18 @@ def Twitterdata(keyword):
 for i in range (0,3):
 	keyword = input('Enter a keyword:')
 	info = Twitterdata(keyword)
-	readfile = open(CACHE_FNAME,"r")
-	jsondata = json.load(readfile)
-	x = 0
-	for key in jsondata[word].keys():
-		val = list(jsondata[word].values())[x]
-		print ('TEXT: ' + key)
-		print ('CREATED AT: ' + value)
-		x += 1
+	for item in info:
+		print ('Text: ' + item)
+		print ('CREATED AT: ' + info[item])
+
+	# readfile = open(CACHE_FNAME,"r")
+	# jsondata = json.load(readfile)
+	# x = 0
+	# for key in jsondata[word].keys():
+	# 	val = list(jsondata[word].values())[x]
+	# 	print ('TEXT: ' + key)
+	# 	print ('CREATED AT: ' + value)
+	# 	x += 1
 
 
 ## 4. With what you learn from the data -- e.g. how exactly to find the 
@@ -125,15 +130,6 @@ for i in range (0,3):
 
 
 
-# print (CACHE_DICTION[keyword])
-# 		writefile = open(CACHE_FNAME,"w")
-# 		writefile.write(dumped_json_cache)
-# 	else:
-# 		CACHE_DICTION[keyword] = Twitterdata(keyword)
-# 		print ('TEXT:' + str(CACHE_DICTION[keyword].keys()) + '\n' 'CREATED AT: ' + str(CACHE_DICTION[keyword].values()))
-# 	next = input('Do you want to keep going? Yes or No?:')
-# 	if next == 'No':
-		# next = False
 
 
 
